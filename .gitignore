@@ -1,0 +1,17 @@
+# Global
+*.log
+
+# Node modules in any partX directory
+part*/node_modules/
+
+# Coverage in any partX directory
+part*/coverage/
+
+# Build in any partX directory
+part*/build/
+
+# DS_Store in any partX directory
+part*/.DS_Store
+
+# Env files in any partX directory
+part*/.env*
