@@ -1,25 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
+import axios from 'axios';
 
 const App = () => {
-  const initialList =[
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }];
-    
-  const [persons, setPersons] = useState(initialList);
+
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [number, setNumber] = useState('');
   const [filter, setFilter] = useState('');
-  const [filterList, setFilterList] = useState(initialList);
+  const [filterList, setFilterList] = useState([]);
+  
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons')
+        .then(response => {
+          setPersons(response.data);
+          setFilterList(response.data);
+        })
+  }, []);
   
   const addNameHandler = (ev) => {
     ev.preventDefault();
     if (persons.find((person) => person.name === newName) !== undefined){
-      alert(`${newName} is already add to phonebook`);
+      alert(`${newName} is already added to phonebook`);
       setNewName('');
       setNumber('');
       return;
@@ -42,7 +46,7 @@ const App = () => {
     const filterValue = ev.target.value;
     setFilter(filterValue);
     if (filterValue !== null || filterValue !== '') {
-      setFilterList(persons.filter(({ name }) => name.toLowerCase().includes(filterValue))); 
+      setFilterList(persons.filter(({ name }) => name.toLowerCase().includes(filterValue.toLowerCase()))); 
     } else {
       setFilterList(persons);
     }
